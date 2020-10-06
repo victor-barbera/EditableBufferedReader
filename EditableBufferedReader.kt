@@ -14,13 +14,12 @@ class EditableBufferedReader(val input: InputStreamReader) : BufferedReader(inpu
     }
     override fun read() : Int {
         this.setRaw()
-        when(input.read()) {
+        val value = input.read()
+        when(value) {
             KeyEvent.VK_RIGHT-> {
-                this.unsetRaw()
                 return 0
             }
             KeyEvent.VK_LEFT-> {
-                this.unsetRaw()
                 return 1
             }
             KeyEvent.VK_HOME-> {
@@ -36,12 +35,15 @@ class EditableBufferedReader(val input: InputStreamReader) : BufferedReader(inpu
                 return 6
             }
             else -> {
-                return input.read()
+                return value
             }
         }
 
     }
     override fun readLine() : String {
+        /* S'haurà de posar el setRaw i unsetRaw al principi
+         * i final d'aquesta funció.
+         */
         return ""
     }
 }
