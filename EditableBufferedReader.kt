@@ -1,7 +1,5 @@
-import java.lang.System.`in`
 import java.awt.event.KeyEvent
 import java.io.*
-import javax.swing.plaf.basic.BasicSplitPaneUI
 
 class EditableBufferedReader(val input: Reader) : BufferedReader(input){
     companion object {
@@ -16,7 +14,7 @@ class EditableBufferedReader(val input: Reader) : BufferedReader(input){
     }
     fun setRaw(){
         val cmd = arrayOf("/bin/sh", "-c", "stty raw </dev/tty")
-        val p=Runtime.getRuntime().exec(cmd).waitFor()
+        Runtime.getRuntime().exec(cmd).waitFor()
     }
     fun unsetRaw(){
         val cmd = arrayOf("/bin/sh", "-c", "stty -raw echo </dev/tty")
@@ -26,50 +24,30 @@ class EditableBufferedReader(val input: Reader) : BufferedReader(input){
         // Al final definim les constats.
         val firstChar = input.read()
         if(firstChar == 27) { // Sequencia d'escape
-            if(input.read() == 91) {
+            return if(input.read() == 91) {
                 when(input.read().toChar()) {
-                    'C'-> return RIGHT_ARROW
-                    'D'-> return LEFT_ARROW
-                    'H'-> return HOME
-                    'F'-> return END
-                    '2'-> return INSERT
-                    '3'-> return DELETE
-                    else -> return NOT_VALID_COMMAND
+                    'C'-> RIGHT_ARROW
+                    'D'-> LEFT_ARROW
+                    'H'-> HOME
+                    'F'-> END
+                    '2'-> INSERT
+                    '3'-> DELETE
+                    else -> NOT_VALID_COMMAND
                 }
-            } else return NOT_VALID_COMMAND
+            } else NOT_VALID_COMMAND
         }else {  // Caracter asci
             if(firstChar == 127) return BACKSPACE
             return firstChar
         }
-        /*val value = input.read()
-        when(value) {
-            KeyEvent.VK_RIGHT-> {
-                return 0
-            }
-            KeyEvent.VK_LEFT-> {
-                return 1
-            }
-            KeyEvent.VK_HOME-> {
-                return 2
-            }
-            KeyEvent.VK_END-> {
-                return 4
-            }
-            KeyEvent.VK_DELETE-> {
-                return 5
-            }
-            KeyEvent.VK_BACK_SPACE -> {
-                return 6
-            }
-            else -> {
-                return value
-            }
-        }*/
+
     }
     override fun readLine() : String {
-        /* S'haurà de posar el setRaw i unsetRaw al principi
-         * i final d'aquesta funció.
-         */
-        return ""
+        var buffer = ""
+        do{
+            var value = read()
+            buffer = buffer.plus(value.toChar())
+            print(value.toChar())
+        }while (value != 13)
+        return buffer
     }
 }
