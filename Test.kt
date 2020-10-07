@@ -2,11 +2,12 @@ import java.io.*
 fun main() {
     val input = EditableBufferedReader(InputStreamReader(System.`in`))
     var str:String?=null
-    var int=0
+    var caracter:Int = 0
     try{
+        input.setRaw()
         //str=input.readLine()
-        int=input.read()
+        caracter = input.read()
         input.unsetRaw()
     }catch (e: IOException){e.printStackTrace()}
-    println("\nline is: $int")
+    println("\nline is: $caracter")
 }
