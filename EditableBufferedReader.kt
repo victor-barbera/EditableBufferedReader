@@ -4,11 +4,11 @@ class EditableBufferedReader(val input: Reader) : BufferedReader(input){
     companion object {
         const val RIGHT_ARROW = 300
         const val LEFT_ARROW = 301
-        const val HOME = 302 // mac: ^+a
-        const val END = 303
+        const val HOME = 302 // mac: fn+esquerra
+        const val END = 303 // mac: fn+dreta
         const val INSERT = 304
         const val DELETE = 305 // mac: fn+backspace
-        const val BACKSPACE = 306
+        const val BACKSPACE = 127
         const val NOT_VALID_COMMAND = -1
     }
     fun setRaw(){
@@ -34,18 +34,21 @@ class EditableBufferedReader(val input: Reader) : BufferedReader(input){
                     else -> NOT_VALID_COMMAND
                 }
             } else NOT_VALID_COMMAND
-        }else {  // Caracter asci
-            if(firstChar == 127) return BACKSPACE
-            return firstChar
-        }
-
+        }else return firstChar // Caracter asci
     }
+
     override fun readLine() : String {
+        /* 
+        * En aquest apartat aquesta funció l'utilitzem per testejar read().
+        * Imprimim per pantalla tots els valors rebuts.
+        */
         var buffer = ""
         do{
             var value = read()
-            buffer = buffer.plus(value.toChar())
-            print(value.toChar())
+            if(value!= NOT_VALID_COMMAND){
+                buffer = buffer.plus(value.toChar())
+                print(value.toChar())
+            }
         }while (value != 13)
         return buffer
     }
