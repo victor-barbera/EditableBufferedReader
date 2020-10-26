@@ -1,34 +1,45 @@
-import java.awt.Cursor
-
-class Line (var buffer : StringBuffer, var pos : Int) : Cursor(pos) {
-    /*casos:
-        move dreta
-        move esquerra
-        eliminar
-        suprimir
-        home
-        end
-        escriptura
-        return
-     */
-    fun move(right : Boolean ){ //0 si esquerra , 1 si dreta
-        if(right) {
-            if(pos != buffer.length)pos++
+class Line (var buffer : StringBuilder, var pos : Int, var ins : Boolean) {
+    fun write (c : Char): Boolean{
+        if (ins){
+            buffer.append(c, pos-1, 1)
         }
-        else {
-            if(pos != 0)pos--
-        }
+        else buffer.append(c)
+        pos++
+        return true
     }
-    fun delete(backspace : Boolean ){ //0 -> eliminar esquerra(del) , 1 ->eliminar dreta(bksp)
-        if(backspace) {
-            buffer = buffer.delete(pos, pos+1)
+    fun right():Boolean{
+        if(pos != buffer.length){
+            pos++
+            return true
         }
-        else buffer = buffer.delete(pos, pos-1)
-        pos--
+        else return false
     }
-    fun home() {pos = 0}
+    fun left():Boolean{
+        if(pos != 0){
+            pos--
+            return true
+        }
+        else return false
+    }
+    fun home():Int{
+        pos = 0
+        return HOME
+    }
+    fun end():Int{
+        pos = buffer.length
+        return END
+    }
+    fun delete(): Boolean{
+        if (buffer.isNotEmpty()){
+            buffer.deleteAt(pos)
+            pos--
+            return true
+        }
+        else return false
+    }
+    fun toggle() = !ins
 
-    fun end() {pos = buffer.length}
-    fun write() {pos++}
-
+    override fun toString(): String {
+        return buffer.toString()
+    }
 }
