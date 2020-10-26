@@ -1,25 +1,25 @@
 class Line (var buffer : StringBuilder, var pos : Int, var ins : Boolean) {
     fun write (c : Char): Boolean{
         if (ins){
-            buffer.append(c, pos-1, 1)
+            buffer.insert(pos-1, c)
         }
-        else buffer.append(c)
+        else buffer.insert(pos, c)
         pos++
         return true
     }
     fun right():Boolean{
-        if(pos != buffer.length){
+        return if(pos != buffer.length){
             pos++
-            return true
+            true
         }
-        else return false
+        else false
     }
     fun left():Boolean{
-        if(pos != 0){
+        return if(pos != 0){
             pos--
-            return true
+            true
         }
-        else return false
+        else false
     }
     fun home():Int{
         pos = 0
@@ -30,12 +30,12 @@ class Line (var buffer : StringBuilder, var pos : Int, var ins : Boolean) {
         return END
     }
     fun delete(): Boolean{
-        if (buffer.isNotEmpty()){
+        return if (buffer.isNotEmpty()){
             buffer.deleteAt(pos)
             pos--
-            return true
+            true
         }
-        else return false
+        else false
     }
     fun toggle() = !ins
 

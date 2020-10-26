@@ -15,17 +15,16 @@ const val ENTER = 13
 class EditableBufferedReader(val input: Reader) : BufferedReader(input) {
     companion object{
         fun setRaw() {
-            val cmd = arrayOf("/bin/sh", "-c", "stty raw </dev/tty")
+            val cmd = arrayOf("/bin/bash", "-c", "stty -echo raw </dev/tty")
             Runtime.getRuntime().exec(cmd).waitFor()
         }
 
         fun unsetRaw() {
-            val cmd = arrayOf("/bin/sh", "-c", "stty -raw echo </dev/tty")
+            val cmd = arrayOf("/bin/bash", "-c", "stty -raw echo </dev/tty")
             Runtime.getRuntime().exec(cmd).waitFor()
         }
     }
     override fun read(): Int {
-        // Al final definim les constats.
         val firstChar = input.read()
         if (firstChar == 27) { // Sequencia d'escape
             return if (input.read() == 91) {
@@ -40,9 +39,9 @@ class EditableBufferedReader(val input: Reader) : BufferedReader(input) {
                 }
             } else NOT_VALID_COMMAND
         } else {  // Caracter asci
-            if (firstChar == 127) return BACKSPACE
+            return if (firstChar == 127) BACKSPACE
             else {
-                return firstChar
+                firstChar
             }
         }
     }
@@ -51,11 +50,11 @@ class EditableBufferedReader(val input: Reader) : BufferedReader(input) {
         var buffer = StringBuilder()
         var pos = 0
         var ins = false
-        var line = Line(buffer ,pos, ins )
+        var line = Line(buffer ,pos, ins)
         try{
             setRaw()
-            do{
-                var ch = read()
+            var ch = this.read()
+            while(ch != ENTER){
                 when(ch){
                     RIGHT_ARROW -> line.right()
                     LEFT_ARROW -> line.left()
@@ -63,14 +62,10 @@ class EditableBufferedReader(val input: Reader) : BufferedReader(input) {
                     END -> line.end()
                     DELETE -> line.delete()
                     INSERT -> line.toggle()
-
-
-
-
                     else -> line.write(ch.toChar())
                 }
-            }while(ch != ENTER)
-
+                ch = this.read()
+            }
         }catch (e: IOException){
             throw e
         }finally { unsetRaw() }
