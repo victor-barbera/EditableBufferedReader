@@ -24,7 +24,7 @@ class EditableBufferedReader(val input: Reader) : BufferedReader(input) {
             Runtime.getRuntime().exec(cmd).waitFor()
         }
         var line = Line()
-        //var console = Console()
+        var console = Console()
     }
     override fun read(): Int {
         val firstChar = input.read()
