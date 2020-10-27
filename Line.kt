@@ -1,11 +1,18 @@
-class Line (var buffer : StringBuilder, var pos : Int, var ins : Boolean) {
+import java.util.*
+
+class Line () : Observable() {
+    companion object{
+        var buffer = StringBuilder()
+        var pos = 0
+        var ins = false
+    }
     fun write (c : Char): Boolean{
         if (ins){
             buffer.insert(pos-1, c)
         }
-        else buffer.insert(pos, c)
+        else if (c != '~')buffer.insert(pos, c)
         pos++
-        return true
+        return ins
     }
     fun right():Boolean{
         return if(pos != buffer.length){
@@ -23,15 +30,23 @@ class Line (var buffer : StringBuilder, var pos : Int, var ins : Boolean) {
     }
     fun home():Int{
         pos = 0
-        return HOME
+        return pos
     }
     fun end():Int{
         pos = buffer.length
-        return END
+        return pos
     }
-    fun delete(): Boolean{
+    fun bksp(): Boolean{
         return if (buffer.isNotEmpty()){
             buffer.deleteAt(pos-1)
+            pos--
+            true
+        }
+        else  false
+    }
+    fun delete(): Boolean{
+        return if (buffer.isNotEmpty() && pos!=buffer.length){
+            buffer.deleteAt(pos)
             pos--
             true
         }
