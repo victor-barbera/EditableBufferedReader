@@ -31,11 +31,11 @@ class Line (var buffer : StringBuilder, var pos : Int, var ins : Boolean) {
     }
     fun delete(): Boolean{
         return if (buffer.isNotEmpty()){
-            buffer.deleteAt(pos)
+            buffer.deleteAt(pos-1)
             pos--
             true
         }
-        else false
+        else  false
     }
     fun toggle() = !ins
 
