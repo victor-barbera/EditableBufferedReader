@@ -4,10 +4,10 @@ import java.io.Reader
 
 const val RIGHT_ARROW = Integer.MIN_VALUE
 const val LEFT_ARROW = Integer.MIN_VALUE + 1
-const val HOME = Integer.MIN_VALUE + 2 // mac: ^+a
-const val END = Integer.MIN_VALUE + 3
-const val INSERT = Integer.MIN_VALUE + 4
-const val DELETE = Integer.MIN_VALUE + 5 // mac: fn+backspace
+const val HOME = Integer.MIN_VALUE + 2 // mac: fn + esquerra
+const val END = Integer.MIN_VALUE + 3 //mac: fn + dreta
+const val INSERT = Integer.MIN_VALUE + 4 //mac: opt + up
+const val DELETE = Integer.MIN_VALUE + 5 // mac: fn + backspace
 const val BACKSPACE = Integer.MIN_VALUE + 5
 const val NOT_VALID_COMMAND = -1
 const val ENTER = 13
@@ -33,8 +33,14 @@ class EditableBufferedReader(val input: Reader) : BufferedReader(input) {
                     'D' -> LEFT_ARROW
                     'H' -> HOME
                     'F' -> END
-                    '2' -> INSERT
-                    '3' -> DELETE
+                    '2' -> {
+                        input.read()
+                        return INSERT
+                    }
+                    '3' -> {
+                        input.read()
+                        return DELETE
+                    }
                     else -> NOT_VALID_COMMAND
                 }
             } else NOT_VALID_COMMAND
@@ -51,10 +57,11 @@ class EditableBufferedReader(val input: Reader) : BufferedReader(input) {
         var pos = 0
         var ins = false
         var line = Line(buffer ,pos, ins)
+        var ch: Number
         try{
             setRaw()
-            var ch = this.read()
-            while(ch != ENTER){
+            do {
+                ch = this.read()
                 when(ch){
                     RIGHT_ARROW -> line.right()
                     LEFT_ARROW -> line.left()
@@ -64,8 +71,7 @@ class EditableBufferedReader(val input: Reader) : BufferedReader(input) {
                     INSERT -> line.toggle()
                     else -> line.write(ch.toChar())
                 }
-                ch = this.read()
-            }
+            } while(ch != ENTER)
         }catch (e: IOException){
             throw e
         }finally { unsetRaw() }

@@ -11,7 +11,7 @@ These instructions will get you a copy of the project up and running on your loc
 Cal tenir descarregat Kotlin i Java. Primer cal compilar:
 
 ```
-kotlinc EditableBufferedReader.kt Test.kt  -include-runtime -d Test.jar
+kotlinc EditableBufferedReader.kt Test.kt Line.kt  -include-runtime -d Test.jar
 ```
 
 Ara només cal executar-lo amb java:
@@ -19,40 +19,8 @@ Ara només cal executar-lo amb java:
 ```
 java -jar Test.jar
 ```
-
-### Prerequisites
-
-What things you need to install the software and how to install them
-
-```
-Give examples
-```
-
-### Installing
-
-A step by step series of examples that tell you how to get a development env running
-
-Say what the step will be
-
-```
-Give the example
-```
-
-And repeat
-
-```
-until finished
-```
-
-End with an example of getting some data out of the system or using it for a little demo
-
+hola
 ## Authors
 
 * **Marina Miró** - [feymery](https://github.com/feymery)
 * **Víctor Barberà** - [victor-barbera](https://github.com/victor-barbera)
-
-## Acknowledgments
-
-* Hat tip to anyone whose code was used
-* Inspiration
-* etc
