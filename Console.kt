@@ -1,6 +1,9 @@
-import java.util.*
 
-class Console : Observer {
+import java.lang.StringBuilder
+import kotlin.properties.Delegates
+import kotlin.reflect.KProperty
+
+class Console {
     companion object{
         //Up: \u001b[{n}A  <- n es numero d moviments
         //Down: \u001b[{n}B
@@ -17,16 +20,21 @@ class Console : Observer {
         n=2 clears entire line*/
         //Set Column: \u001b[{n}G moves cursor to column n
         //Set Position: \u001b[{n};{m}H moves cursor to row n column m
-        const val RIGHT = "\u001b[1C"
-        const val CLEAR = "\u001b[2J"
-        const val LEFT = "\u001b[1D"
-        const val INSERT = "\u001b[1@"
-        const val BKSP = "\u001b[1D" + "\u001b[1P" //left + Delete
-        const val DEL = "\u001b[1P" //Delete
-        const val HOME = "\u001b[1G" // Move cursor to col 1 in current row.
-        const val END = "\u001b["
+
     }
-    override fun update(o: Observable?, arg: Any?) {
-        TODO("Not yet implemented")
+    var type: String by Delegates.observable("", this::onType)
+    private fun onType(property: KProperty<*>, oldType: String, newType: String) {
+            print(newType)
+            /*when (newType) {
+                RIGHT -> print(RIGHT_KEY)
+                LEFT -> print(LEFT_KEY)
+                INSERT -> print(INSERT_KEY)
+                BKSP -> print(BKSP_KEY)
+                DELETE -> print(DEL_KEY)
+                HOME -> print(HOME_KEY)
+                END -> print(END_KEY)
+                else -> print(newType.toChar())
+            }
+        }*/
     }
 }

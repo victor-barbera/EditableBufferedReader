@@ -12,6 +12,15 @@ const val BKSP = Integer.MIN_VALUE + 6
 const val NOT_VALID_COMMAND = -1
 const val ENTER = 13
 
+const val RIGHT_KEY = "\u001b[1C"
+const val CLEAR = "\u001b[1000D"
+const val LEFT_KEY = "\u001b[1D"
+const val INSERT_KEY = "\u001b[1@"
+const val BKSP_KEY = "\u001b[1D" + "\u001b[1P" //left + Delete
+const val DEL_KEY = "\u001b[1P" //Delete
+const val HOME_KEY = "\u001b[1G" // Move cursor to col 1 in current row.
+const val END_KEY = "\u001b["
+
 class EditableBufferedReader(val input: Reader) : BufferedReader(input) {
     companion object{
         fun setRaw() {
@@ -23,8 +32,8 @@ class EditableBufferedReader(val input: Reader) : BufferedReader(input) {
             val cmd = arrayOf("/bin/bash", "-c", "stty -raw echo </dev/tty")
             Runtime.getRuntime().exec(cmd).waitFor()
         }
-        var line = Line()
         var console = Console()
+        var line = Line(console)
     }
     override fun read(): Int {
         val firstChar = input.read()
