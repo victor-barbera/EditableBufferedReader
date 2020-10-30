@@ -7,19 +7,18 @@ class Line (val console: Console) {
         var pos = 0
         var ins = false
     }
-    fun write (c : Char): Boolean{
-        if (ins){
-            buffer.insert(pos-1, c)
+    fun write (c : Char){
+        if (c != '~'){
+            if (ins){
+                buffer.setCharAt(pos-1, c)
+                console.type = CLEAR + buffer.toString() + "\u001b[${pos}G"
+            }
+            else{
+                buffer.insert(pos, c)
+                console.type = CLEAR + buffer.toString() + "\u001b[${pos+2}G"
+            }
             pos++
-            console.type = CLEAR + buffer.toString() + "\u001b[${pos-1}G"
         }
-        else if (c != '~') {
-            buffer.insert(pos, c)
-            pos++
-            console.type = CLEAR + buffer.toString() + "\u001b[${pos+1}G"
-        }
-
-        return ins
     }
     fun right():Boolean{
         return if(pos != buffer.length){
@@ -65,10 +64,11 @@ class Line (val console: Console) {
         }
         else  false
     }
-    fun toggle() : Boolean{
-        if (!ins) console.type = LEFT_KEY
-        else if (ins) console.type = RIGHT_KEY
-        return !ins
+    fun toggle() {
+        ins = !ins
+        if (ins == true) console.type = LEFT_KEY
+        else console.type = RIGHT_KEY
+
     }
 
     override fun toString(): String {
